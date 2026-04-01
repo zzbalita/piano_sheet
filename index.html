@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Piano Sheet Player</title>
+    <meta
+      name="description"
+      content="A modern piano sheet player UI — upload, pick a sample, and play with an on-screen keyboard."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app" role="application">
+      <header class="topbar">
+        <div class="brand">
+          <div class="logo" aria-hidden="true">♪</div>
+          <div>
+            <div class="brand__title">Piano Sheet Player</div>
+            <div class="brand__subtitle">Upload a score • Play • Practice</div>
+          </div>
+        </div>
+
+        <div class="topbar__actions">
+          <button class="btn btn--ghost" type="button" id="inviteBtn">
+            Invite collaborators
+          </button>
+          <a class="btn btn--ghost" href="#" aria-label="Open Synthesia">
+            Synthesia
+          </a>
+          <button class="btn btn--primary" type="button" id="loginBtn">
+            Log in
+          </button>
+        </div>
+      </header>
+
+      <div class="layout">
+        <aside class="sidebar" aria-label="Sidebar">
+          <section class="card card--drop">
+            <div
+              class="dropzone"
+              id="dropzone"
+              tabindex="0"
+              role="button"
+              aria-label="Upload or drop a file"
+            >
+              <div class="dropzone__icon" aria-hidden="true">⬆</div>
+              <div class="dropzone__title">Drop your file here</div>
+              <div class="dropzone__hint">
+                Supports: PNG, JPG, PDF, MIDI, MusicXML
+              </div>
+              <div class="dropzone__meta" id="dropzoneMeta">No file selected</div>
+            </div>
+
+            <div class="dropzone__actions">
+              <input
+                id="fileInput"
+                type="file"
+                accept=".png,.jpg,.jpeg,.pdf,.mid,.midi,.musicxml,.xml"
+                hidden
+              />
+              <button class="btn btn--secondary" type="button" id="chooseFileBtn">
+                Choose file
+              </button>
+              <button class="btn btn--ghost" type="button" id="clearFileBtn" disabled>
+                Clear
+              </button>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="card__header">
+              <div class="card__title">Sample songs</div>
+              <div class="pill">Free</div>
+            </div>
+
+            <div class="list" role="list">
+              <button class="list__item is-active" type="button" data-song="twinkle">
+                <div class="list__icon" aria-hidden="true">🎵</div>
+                <div class="list__main">
+                  <div class="list__title">Twinkle Twinkle Little Star</div>
+                  <div class="list__subtitle">Traditional</div>
+                </div>
+                <div class="badge badge--easy">Easy</div>
+              </button>
+
+              <button class="list__item" type="button" data-song="ode">
+                <div class="list__icon" aria-hidden="true">🎵</div>
+                <div class="list__main">
+                  <div class="list__title">Ode to Joy</div>
+                  <div class="list__subtitle">Beethoven</div>
+                </div>
+                <div class="badge badge--easy">Easy</div>
+              </button>
+
+              <button class="list__item" type="button" data-song="elise">
+                <div class="list__icon" aria-hidden="true">🎵</div>
+                <div class="list__main">
+                  <div class="list__title">Für Elise</div>
+                  <div class="list__subtitle">Beethoven</div>
+                </div>
+                <div class="badge badge--med">Medium</div>
+              </button>
+
+              <button class="list__item" type="button" data-song="moonlight">
+                <div class="list__icon" aria-hidden="true">🎵</div>
+                <div class="list__main">
+                  <div class="list__title">Moonlight Sonata</div>
+                  <div class="list__subtitle">Beethoven</div>
+                </div>
+                <div class="badge badge--hard">Hard</div>
+              </button>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="card__header">
+              <div class="card__title">MIDI input</div>
+              <div class="pill" id="midiStatus">Off</div>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="midiInputSelect">Device</label>
+              <select class="field__select" id="midiInputSelect" disabled>
+                <option value="">No device</option>
+              </select>
+            </div>
+
+            <div class="row">
+              <button class="btn btn--secondary" type="button" id="enableMidiBtn">
+                Enable MIDI
+              </button>
+              <button class="btn btn--ghost" type="button" id="disableMidiBtn" disabled>
+                Disable
+              </button>
+            </div>
+
+            <div class="muted" id="midiHint">
+              Use Chrome/Edge on HTTPS/localhost.
+            </div>
+          </section>
+        </aside>
+
+        <main class="main" aria-label="Main content">
+          <section class="panel panel--score">
+            <div class="panel__inner">
+              <div class="score">
+                <div class="score__icon" aria-hidden="true">📄</div>
+                <div class="score__title" id="scoreTitle">No sheet loaded</div>
+                <div class="score__subtitle" id="scoreSubtitle">
+                  Upload a file or choose a sample song.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel panel--player" aria-label="Player controls">
+            <div class="player">
+              <div class="player__transport">
+                <button class="iconbtn" type="button" id="btnUndo" aria-label="Undo">
+                  ↺
+                </button>
+                <button class="iconbtn" type="button" id="btnPrev" aria-label="Previous">
+                  ⏮
+                </button>
+
+                <button class="playbtn" type="button" id="btnPlay" aria-label="Play">
+                  ▶
+                </button>
+
+                <button class="iconbtn" type="button" id="btnNext" aria-label="Next">
+                  ⏭
+                </button>
+                <button class="iconbtn" type="button" id="btnRedo" aria-label="Redo">
+                  ↻
+                </button>
+              </div>
+
+              <div class="player__sliders">
+                <div class="slider">
+                  <div class="slider__head">
+                    <span class="slider__label">Tempo</span>
+                    <span class="slider__value" id="tempoValue">120 BPM</span>
+                  </div>
+                  <input
+                    id="tempo"
+                    class="range"
+                    type="range"
+                    min="40"
+                    max="220"
+                    value="120"
+                  />
+                </div>
+
+                <div class="slider">
+                  <div class="slider__head">
+                    <span class="slider__label">Volume</span>
+                    <span class="slider__value" id="volumeValue">70%</span>
+                  </div>
+                  <input
+                    id="volume"
+                    class="range"
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="70"
+                  />
+                </div>
+              </div>
+
+              <div class="player__hint">
+                Tip: click a key, or use your keyboard
+                <kbd>A</kbd><kbd>W</kbd><kbd>S</kbd><kbd>E</kbd><kbd>D</kbd>…
+              </div>
+            </div>
+          </section>
+
+          <section class="panel panel--keys" aria-label="Piano keyboard">
+            <div class="keysHeader">
+              <div class="keysHeader__left">
+                <div class="pill pill--soft">C3 → C5</div>
+                <div class="muted">Mouse, keyboard, or MIDI</div>
+              </div>
+              <div class="keysHeader__right">
+                <button class="btn btn--ghost" type="button" id="panicBtn">
+                  Panic (All notes off)
+                </button>
+              </div>
+            </div>
+
+            <div class="keyboardWrap">
+              <div class="keyboard" id="keyboard" aria-label="On-screen piano"></div>
+            </div>
+          </section>
+        </main>
+      </div>
+
+      <footer class="footer">
+        <div class="footer__left">
+          <span class="muted">Demo UI — no real sheet parsing yet.</span>
+        </div>
+        <div class="footer__right">
+          <a href="#" class="link" id="settingsLink">Settings</a>
+          <span class="muted">•</span>
+          <a href="#" class="link" id="aboutLink">About</a>
+        </div>
+      </footer>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true">
+      <div class="toast__msg" id="toastMsg"></div>
+      <button class="toast__close" type="button" id="toastClose" aria-label="Close">
+        ✕
+      </button>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
+
