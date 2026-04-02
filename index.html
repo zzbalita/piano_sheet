@@ -151,10 +151,36 @@
           <section class="panel panel--score">
             <div class="panel__inner">
               <div class="score">
-                <div class="score__icon" aria-hidden="true">📄</div>
-                <div class="score__title" id="scoreTitle">No sheet loaded</div>
-                <div class="score__subtitle" id="scoreSubtitle">
-                  Upload a file or choose a sample song.
+                <div class="score__head">
+                  <div class="score__icon" aria-hidden="true">📄</div>
+                  <div>
+                    <div class="score__title" id="scoreTitle">No sheet loaded</div>
+                    <div class="score__subtitle" id="scoreSubtitle">
+                      Upload a file or choose a sample song.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="sheet" id="sheet" aria-label="Sheet music"></div>
+                <div class="practice" id="practiceBar" aria-label="Practice mode">
+                  <div class="practice__left">
+                    <div class="practice__title">Practice</div>
+                    <div class="practice__next" id="practiceNext">Load a MusicXML file or pick a sample.</div>
+                  </div>
+                  <div class="practice__right">
+                    <button class="btn btn--secondary" type="button" id="practiceStartBtn" disabled>
+                      Start
+                    </button>
+                    <button class="btn btn--ghost" type="button" id="practiceResetBtn" disabled>
+                      Reset
+                    </button>
+                    <button class="btn btn--ghost" type="button" id="practiceStopBtn" disabled>
+                      Stop
+                    </button>
+                  </div>
+                </div>
+                <div class="sheetLegend" id="sheetLegend">
+                  Numbers show scale degree in C major (1=C, 2=D, …, 7=B).
                 </div>
               </div>
             </div>
@@ -224,10 +250,31 @@
           <section class="panel panel--keys" aria-label="Piano keyboard">
             <div class="keysHeader">
               <div class="keysHeader__left">
-                <div class="pill pill--soft">C3 → C5</div>
+                <div class="pill pill--soft" id="keyboardRangePill">C3 → C5</div>
                 <div class="muted">Mouse, keyboard, or MIDI</div>
               </div>
               <div class="keysHeader__right">
+                <button class="btn btn--secondary" type="button" id="recordBtn">
+                  Record
+                </button>
+                <button class="btn btn--ghost" type="button" id="stopRecordBtn" disabled>
+                  Stop
+                </button>
+                <button class="btn btn--ghost" type="button" id="playRecordBtn" disabled>
+                  Play recording
+                </button>
+                <button class="btn btn--ghost" type="button" id="downloadRecordBtn" disabled>
+                  Download
+                </button>
+                <input
+                  id="importRecordInput"
+                  type="file"
+                  accept="application/json"
+                  hidden
+                />
+                <button class="btn btn--ghost" type="button" id="importRecordBtn">
+                  Import recording
+                </button>
                 <button class="btn btn--ghost" type="button" id="panicBtn">
                   Panic (All notes off)
                 </button>
@@ -260,6 +307,7 @@
       </button>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/vexflow@4.2.5/build/vexflow-min.js"></script>
     <script src="./script.js"></script>
   </body>
 </html>
